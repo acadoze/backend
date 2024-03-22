@@ -1,0 +1,28 @@
+name: "UAT Workflow"
+on:
+  push:
+    branches:
+      - dev
+
+jobs:
+  Lint-and-migrate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup nodejs
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Install packages and lint
+        run: npm install
+      - name: Lint
+        run: npm run format && npm run prettier
+      - name: Run migrations
+        env:
+          DB_NAME: ${{ secrets.DB_NAME }}
+          DB_USER: ${{ secrets.DB_USER }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          DB_PORT: ${{ secrets.DB_PORT }}
+          DB_HOST: ${{ secrets.DB_HOST }}
+          NODE_ENV: test
+        run: npx sequelize-cli db:migrate --env=$NODE_ENV
