@@ -12,3 +12,4 @@ module.exports.database = {
 module.exports.JWT_SECRET = process.env.JWT_SECRET
 module.exports.SESSION_SECRET = process.env.SESSION_SECRET
 module.exports.COOKIE_SECRET = process.env.COOKIE_SECRET
+module.exports.CLIENT_ORIGINS = process.env.CLIENT_ORIGINS.split(', ')

@@ -5,8 +5,9 @@ const logger = require("morgan");
 const app = express();
 const routes = require("./routes");
 const session = require("express-session");
-const { SESSION_SECRET, COOKIE_SECRET } = require("./config");
+const { SESSION_SECRET, COOKIE_SECRET, CLIENT_ORIGINS } = require("./config");
 const helmet = require("helmet");
+const cors = require('cors')
 
 app.use(helmet({ contentSecurityPolicy: false }));
 app.use(logger("dev"));
@@ -14,7 +15,11 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser(COOKIE_SECRET));
 
-
+app.use(cors({
+  methods: 'GET, POST, DELETE, PUT',
+  origin: CLIENT_ORIGINS,
+  credentials: true
+}));
 app.use(
   session({
     secret: SESSION_SECRET,
@@ -32,16 +37,7 @@ app.use(function (req, res, next) {
 
 // error handler
 app.use(function (err, req, res, next) {
-  // set locals, only providing error in development
-  res.locals.message = err.message;
-  if (req.app.get("env") === "development") {
-    res.locals.error = err;
-    console.error(err, err.stack);
-  } else {
-    res.locals.error = {};
-  }
-
-  // render the error page
+  console.error(err)
   res.status(err.status || 500).json({
     success: false,
     message: err.message,

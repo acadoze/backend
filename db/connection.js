@@ -1,11 +1,12 @@
-const Sequelize = require("sequelize")
-const {database} = require("../config")
+const db = require("./models");
 
-const connection = new Sequelize(
-  database.database,
-  database.username,
-  database.password,
-  database
-);
-
-module.exports = connection
+module.exports = async () => {
+  try {
+    await db.sequelize.authenticate();
+    console.info("connected to postgres");
+  } catch (err) {
+    console.error("postgres failed to connect");
+    console.error(err);
+  }
+}
+  
