@@ -80,11 +80,11 @@ router.get('/:id/chat', validateRole("student"), catchAsyncErrors(async function
     )
   })
   console.log("--- AUDIO COMPLETE ---");
-  res.set({
-    "Content-Type": "audio/mpeg",
-    "Content-Disposition": `inline; filename=tts.mp3`,
-    "visemes": JSON.stringify(visemes)
-  });
+  res.setHeader("Content-Type", "audio/mpeg")
+  res.setHeader("Content-Disposition", `inline; filename=tts.mp3`)
+  res.setHeader("visemes", JSON.stringify(visemes))
+  res.set("Access-Control-Expose-Headers","visemes")
+
   audioStream.pipe(res);
 
 }))
