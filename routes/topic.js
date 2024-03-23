@@ -4,6 +4,7 @@ const {Topics: Topic, Users: User, TopicSubscriptions: TopicSubscription} = requ
 const bcrypt = require("bcrypt")
 const {JWT_SECRET} = require("../config");
 const { catchAsyncErrors } = require('./middleware/errors');
+const { validateTopicId } = require('./middleware/idValidators');
 const ApiError = require("../utils/errors")
 const path = require("path")
 
@@ -22,13 +23,10 @@ const config = {
 }
 const openai = new OpenAI(config)
 
-router.get('/:id/chat', validateRole("student"), catchAsyncErrors(async function(req, res, next) {
+router.get('/:id/chat', validateRole("student"), validateTopicId, catchAsyncErrors(async function(req, res, next) {
   const {id} = req.params
-  const find = await Topic.findByPk(id)
-  if (!find) {
-    return next(new ApiError("This topic is invalid", 400))
-  }
-  const knowledgeContent = fs.readFileSync(path.join(__dirname, `../knowledge/${(find.title).toLowerCase()}.txt`) , 'utf8');
+  const topic = req.topic
+  const knowledgeContent = fs.readFileSync(path.join(__dirname, `../knowledge/${(topic.title).toLowerCase()}.txt`) , 'utf8');
 
   const {question} = req.query
   const teacher = "Ava" // or Andrew

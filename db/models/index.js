@@ -9,7 +9,7 @@ const db = {};
 
 const sequelize = new Sequelize(
   config.database.database,
-  config.database.username,
+  config.database.Usersname,
   config.database.password,
   config.database,
 );
@@ -38,47 +38,71 @@ Object.keys(db).forEach((modelName) => {
 });
 
 const {
-  TopicSubscriptions: TopicSubscription,
-  Users: User,
-  ClassRoomSubscriptions: ClassRoomSubscription,
-  ClassRooms: ClassRoom,
-  Topics: Topic,
+  TopicSubscriptions,
+  Users,
+  ClassRoomSubscriptions,
+  ClassRooms,
+  Topics,
+  Quizzes,
+  StudentQuizzes
 } = db
 
-User.hasMany(TopicSubscription, {
+Users.hasMany(TopicSubscriptions, {
   foreignKey: "studentId"
 })
-TopicSubscription.belongsTo(User, {
+TopicSubscriptions.belongsTo(Users, {
   foreignKey: "studentId"
 })
 
-Topic.hasMany(TopicSubscription, {
+Topics.hasMany(TopicSubscriptions, {
   foreignKey: "topicId"
 })
-TopicSubscription.belongsTo(Topic, {
+TopicSubscriptions.belongsTo(Topics, {
   foreignKey: "topicId"
 })
 
-User.hasMany(ClassRoom, {
+Users.hasMany(ClassRooms, {
   foreignKey: "teacherId"
 })
-ClassRoom.belongsTo(User, {
+ClassRooms.belongsTo(Users, {
   foreignKey: "teacherId"
 })
 
-ClassRoom.hasMany(ClassRoomSubscription, {
+ClassRooms.hasMany(ClassRoomSubscriptions, {
   foreignKey: "classRoomId"
 })
-ClassRoomSubscription.belongsTo(ClassRoom, {
+ClassRoomSubscriptions.belongsTo(ClassRooms, {
   foreignKey: "classRoomId"
 })
 
-User.hasMany(ClassRoomSubscription, {
+Users.hasMany(ClassRoomSubscriptions, {
   foreignKey: "studentId"
 })
-ClassRoomSubscription.belongsTo(User, {
+ClassRoomSubscriptions.belongsTo(Users, {
   foreignKey: "studentId"
 })
+
+Topics.hasMany(Quizzes, {
+  foreignKey: "topicId"
+})
+Quizzes.belongsTo(Topics, {
+  foreignKey: "topicId"
+})
+
+Users.hasMany(StudentQuizzes, {
+  foreignKey: "studentId"
+})
+StudentQuizzes.belongsTo(Users, {
+  foreignKey: "studentId"
+})
+
+Quizzes.hasMany(StudentQuizzes, {
+  foreignKey: "quizId"
+})
+StudentQuizzes.belongsTo(Quizzes, {
+  foreignKey: "quizId"
+})
+
 
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;

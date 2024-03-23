@@ -37,7 +37,7 @@ app.use(function (req, res, next) {
 
 // error handler
 app.use(function (err, req, res, next) {
-  console.error(err)
+  process.env["NODE_ENV"] === "development" && console.error(err)
   res.status(err.status || 500).json({
     success: false,
     message: err.message,
