@@ -28,7 +28,7 @@ router.get('/:id/chat', validateRole("student"), catchAsyncErrors(async function
   if (!find) {
     return next(new ApiError("This topic is invalid", 400))
   }
-  const knowledgeContent = fs.readFileSync(path.join(__dirname, `../knowledge/${find.title}.txt`) , 'utf8');
+  const knowledgeContent = fs.readFileSync(path.join(__dirname, `../knowledge/${(find.title).toLowerCase()}.txt`) , 'utf8');
 
   const {question} = req.query
   const teacher = "Ava" // or Andrew
