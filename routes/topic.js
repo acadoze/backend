@@ -99,7 +99,6 @@ router.put('/:id/subscribe', validateRole("teacher"), catchAsyncErrors(async fun
   if (!id || !await Topic.findByPk(id)) {
     return next(new ApiError("Topic does not exist", 400));
   }
-  console.log(studentId)
   await TopicSubscription.create({
     studentId,
     topicId: id

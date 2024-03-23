@@ -17,7 +17,6 @@ router.get('/topics', validateRole("student"), catchAsyncErrors(async function(r
     }
     
   })
-  console.log(find)
   if (!find || find.length === 0) {
     return res.status(200).json({
       message: "You have not yet been assigned a topic",
