@@ -55,13 +55,10 @@ router.put('/:id/submit', validateRole("student"), catchAsyncErrors(async functi
     return res.status(200).json({
       message: "This quiz has already been submitted"
     })
+  } else {
+    await StudentQuizzes.create({submitted: true, responses: JSON.stringify(responses), quizId: req.params.id, studentId: req.user.id})
   }
-  await StudentQuizzes.update({submitted: true, responses: JSON.stringify(responses)}, {
-    where: {
-      quizId: req.params.id,
-      studentId: req.user.id
-    }
-  })
+  
   res.status(200).json({
     message: "Quiz has been submitted."
   })
