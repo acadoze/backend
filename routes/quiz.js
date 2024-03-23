@@ -50,8 +50,12 @@ router.get('/', validateRole("student"), catchAsyncErrors(async function(req, re
 
 router.put('/:id/submit', validateRole("student"), catchAsyncErrors(async function(req, res, next) {
   const {responses} = req.body
-  const find = await StudentQuizzes.find({where:{quizId: req.params.id, studentId: req.user.id}})
-  // if (find)
+  const find = await StudentQuizzes.findOne({where:{quizId: req.params.id, studentId: req.user.id}})
+  if (find) {
+    return res.status(200).json({
+      message: "This quiz has already been submitted"
+    })
+  }
   await StudentQuizzes.update({submitted: true, responses: JSON.stringify(responses)}, {
     where: {
       quizId: req.params.id,
