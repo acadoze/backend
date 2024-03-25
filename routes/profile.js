@@ -9,7 +9,7 @@ const ApiError = require("../utils/errors")
 router.get('/', catchAsyncErrors(async function(req, res, next) {
   const {id} = req.user
   const find = await Users.findByPk(id, {
-  	attributes: ["fullName", "email", "isEmailVerified", "role", "imgPath", "createdAt"]
+  	attributes: ["id", "fullName", "email", "isEmailVerified", "role", "imgPath", "createdAt"]
   })
   return res.status(200).json({
     message: "Profile retrieved",
