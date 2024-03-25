@@ -52,11 +52,16 @@ router.put('/:id/submit', validateRole("student"), catchAsyncErrors(async functi
   const {responses} = req.body
   const find = await StudentQuizzes.findOne({where:{quizId: req.params.id, studentId: req.user.id}})
   if (find) {
-    return res.status(200).json({
+    return res.status(400).json({
       message: "This quiz has already been submitted"
     })
   } else {
-    await StudentQuizzes.create({submitted: true, responses: JSON.stringify(responses), quizId: req.params.id, studentId: req.user.id})
+    await StudentQuizzes.create({
+      submitted: true, 
+      responses: JSON.stringify(responses), 
+      quizId: req.params.id, 
+      studentId: req.user.id
+    })
   }
   
   res.status(200).json({
@@ -65,62 +70,6 @@ router.put('/:id/submit', validateRole("student"), catchAsyncErrors(async functi
 }))
 
 
-router.put('/:id/response/question/:questionId/option/:optionId', validateRole("student"), catchAsyncErrors(async function(req, res, next) {
-  const {questionId, optionId} = req.params
-  const studentQuiz = await StudentQuizzes.findOne({
-    where: {
-      studentId: req.user.id,
-      quizId: req.params.id
-    },
-  })
-  if (!studentQuiz) {
-    await StudentQuizzes.create({
-      studentId: req.user.id,
-      quizId: req.params.id,
-      responses: JSON.stringify([
-        {
-          questionId,
-          optionId,
-          attempts: [optionId]
-        }
-      ])
-    })
-  } else {
-    if (studentQuiz.submitted) {
-      return res.status(400).json({
-        message: "Quiz has already been taken by this student"
-      })
-    }
-    let responses = JSON.parse(studentQuiz.responses)
-
-    // Set the responses to an array if no response has been recorded
-    if (!Array.isArray(responses)) {
-      responses = []
-    }
-
-    // Avoid duplicate response to a question
-    let responseIndex = responses.findIndex(i => i.questionId === questionId)
-    if (responseIndex === -1) {
-      responses.push({questionId, optionId, attempts: [optionId]})
-    } else {
-      responses[responseIndex].optionId = optionId
-      let attemptIndex = responses[responseIndex].attempts.findIndex(i => i === optionId)
-      if (!attemptIndex) responses[responseIndex].attempts.push(optionId)
-      else {
-        responses[responseIndex].attempts.splice(attemptIndex, 1)
-        responses[responseIndex].attempts.push(optionId)
-      }
-    }
-
-    await StudentQuizzes.update({responses}, {
-      where: {
-        quizId, studentId
-      }
-    })
-  }
-  return res.status(200)
-
-}));
 router.post('/', validateRole("teacher"), catchAsyncErrors(async function(req, res, next) {
   const {topicId} = req.query
   const topic = await Topics.findByPk(topicId)
@@ -176,7 +125,6 @@ router.post('/', validateRole("teacher"), catchAsyncErrors(async function(req, r
     })
     quiz.questions[qIdx].correctAnswer = quiz.questions[qIdx].options[quiz.questions[qIdx].correctAnswer].id
   })
-  console.log(quiz)
   await Quizzes.create({
     title: quiz.quizTitle,
     topicId,
