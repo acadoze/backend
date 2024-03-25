@@ -12,7 +12,6 @@ module.exports = {
       },
       studentId: {
         type: DataTypes.UUID,
-        unique: true,
         references: {
           model: "Users",
           key: "id",
@@ -22,7 +21,6 @@ module.exports = {
       },
       topicId: {
         type: DataTypes.UUID,
-        unique: true,
         references: {
           model: "Topics",
           key: "id",

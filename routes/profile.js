@@ -11,7 +11,6 @@ router.get('/', catchAsyncErrors(async function(req, res, next) {
   const find = await Users.findByPk(id, {
   	attributes: ["fullName", "email", "isEmailVerified", "role", "imgPath", "createdAt"]
   })
-  console.log(find)
   return res.status(200).json({
     message: "Profile retrieved",
     profile: find

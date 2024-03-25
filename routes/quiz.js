@@ -32,7 +32,7 @@ router.get('/', validateRole("student"), catchAsyncErrors(async function(req, re
   })
   if (!find) {
     return res.status(200).json({
-      message: "no quiz has been created for this topic yet."
+      message: "No quiz has been created for this topic yet."
     })
   }
   find.questions = JSON.parse(find.questions)

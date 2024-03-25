@@ -10,7 +10,6 @@ module.exports = (sequelize, DataTypes) => {
       },
       studentId: {
         type: DataTypes.UUID,
-        unique: true,
         references: {
           model: "Users",
           key: "id",
@@ -20,7 +19,6 @@ module.exports = (sequelize, DataTypes) => {
       },
       topicId: {
         type: DataTypes.UUID,
-        unique: true,
         references: {
           model: "Topics",
           key: "id",

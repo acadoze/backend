@@ -13,7 +13,6 @@ module.exports = {
       name: DataTypes.STRING,
       teacherId: {
         type: DataTypes.UUID,
-        unique: true,
         references: {
           model: "Users",
           key: "id",

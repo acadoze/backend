@@ -9,9 +9,17 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         primaryKey: true,
       },
+      teacherId: {
+        type: DataTypes.UUID,
+        references: {
+          model: "Users",
+          key: "id",
+        },
+        onUpdate: "CASCADE",
+        onDelete: "CASCADE",
+      },
       studentId: {
         type: DataTypes.UUID,
-        unique: true,
         references: {
           model: "Users",
           key: "id",
@@ -21,7 +29,6 @@ module.exports = (sequelize, DataTypes) => {
       },
       classRoomId: {
         type: DataTypes.UUID,
-        unique: true,
         references: {
           model: "ClassRooms",
           key: "id",
