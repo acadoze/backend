@@ -4,8 +4,7 @@ const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 const app = express();
 const routes = require("./routes");
-const session = require("express-session");
-const { SESSION_SECRET, COOKIE_SECRET, CLIENT_ORIGINS } = require("./config");
+const {COOKIE_SECRET, CLIENT_ORIGINS } = require("./config");
 const helmet = require("helmet");
 const cors = require('cors')
 
@@ -20,14 +19,6 @@ app.use(cors({
   origin: CLIENT_ORIGINS,
   credentials: true
 }));
-app.use(
-  session({
-    secret: SESSION_SECRET,
-    saveUninitialized: false,
-    resave: false,
-  }),
-);
-
 app.use(routes);
 
 // catch 404 and forward to error handler
