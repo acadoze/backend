@@ -13,6 +13,7 @@ module.exports.validateTopicId = async (req, res, next) => {
     return next(new ApiError("This topic is invalid", 400))
   }	
   req.topic = find
+next()
 }
 
 module.exports.avoidDuplicateQuizEntry = async (req, res, next) => {

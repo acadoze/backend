@@ -41,7 +41,7 @@ router.get('/', validateRole("student"), catchAsyncErrors(async function(req, re
     ...i,
     correctAnswer: ""
   }))
-
+console.log(find)
   return res.status(200).json({
     message: "Quiz retrived",
     quiz: find
